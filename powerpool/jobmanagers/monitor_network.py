@@ -359,8 +359,7 @@ class MonitorNetwork(Jobmanager, NodeMonitorMixin):
         coinbase.inputs.append(
             Input.coinbase(self._last_gbt['height'],
                            addtl_push=[mm_data] if mm_data else [],
-                           extra_script_sig=b'\0' * extranonce_length,
-                           desc_string=self.config['coinbase_string']))
+                           extra_script_sig=b'\0' * extranonce_length))
 
         coinbase_value = self._last_gbt['coinbasevalue']
 
