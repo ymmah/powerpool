@@ -389,12 +389,12 @@ class MonitorNetwork(Jobmanager, NodeMonitorMixin):
         bt_obj = BlockTemplate.from_gbt(self._last_gbt,
                                         coinbase,
                                         extranonce_length,
-                                        [Transaction(unhexlify(t['data']), fees=t['fee'])
+                                        [Transaction(unhexlify(t['data']), fees=t['fee'], txid=unhexlify(t.get('txid', '')))
                                          for t in self._last_gbt['transactions']])
         # add in our merged mining data
         if mm_data:
-            hashes = [bitcoin_data.hash256(tx.raw) for tx in bt_obj.transactions]
-            bt_obj.merkle_link = bitcoin_data.calculate_merkle_link([None] + hashes, 0)
+            txids = [tx.txid for tx in bt_obj.transactions]
+            bt_obj.merkle_link = bitcoin_data.calculate_merkle_link([None] + txids, 0)
         bt_obj.merged_data = auxdata
         bt_obj.job_id = job_id
         bt_obj.diff1 = self.config['diff1']
