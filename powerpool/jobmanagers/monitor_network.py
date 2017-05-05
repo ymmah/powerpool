@@ -273,7 +273,12 @@ class MonitorNetwork(Jobmanager, NodeMonitorMixin):
                                    'time',
                                    'transactions/remove',
                                    'prevblock',
-                               ]})
+                                   'prevblock',
+                                    ],
+                                'rules': [
+                                    'segwit',
+                                    ]
+                                })
         except RPCException:
             return False
 
