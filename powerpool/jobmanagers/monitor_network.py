@@ -362,6 +362,7 @@ class MonitorNetwork(Jobmanager, NodeMonitorMixin):
                            extra_script_sig=b'\0' * extranonce_length))
 
         coinbase_value = self._last_gbt['coinbasevalue']
+        witness_commitment = self._last_gbt.get('default_witness_commitment', '')
 
         # Payout Darkcoin masternodes
         mn_enforcement = self._last_gbt.get('enforce_masternode_payments', True)
@@ -380,6 +381,9 @@ class MonitorNetwork(Jobmanager, NodeMonitorMixin):
         # simple output to the proper address and value
         coinbase.outputs.append(
             Output.to_address(coinbase_value, self.config['pool_address']))
+        if (witness_commitment != ''):
+            coinbase.outputs.append(
+                Output(0, unhexlify(witness_commitment)))
 
         job_id = hexlify(struct.pack(str("I"), self._job_counter))
         bt_obj = BlockTemplate.from_gbt(self._last_gbt,
